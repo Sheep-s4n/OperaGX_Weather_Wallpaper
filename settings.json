@@ -1,0 +1,24 @@
+{
+    "open-weather api key": "",
+    "city": "New York",
+    "opera launcher path" : "C:/Users/.../AppData/Local/Programs/Opera GX/launcher.exe",
+    "themes files path": "C:/Users/.../AppData/Roaming/Opera Software/Opera GX Stable/themes",
+    "url loading timeout" : "2", 
+    "closing window timeout" : "1", 
+    "mouse pos width" : "default",
+    "mouse pos height" : "default",
+    
+    "themes" : {
+        "clear sky": "https://addons.opera.com/en/wallpapers/details/coding-den-live-wallpaper/",
+        "few clouds": "https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/",
+        "scattered clouds": "https://addons.opera.com/en/wallpapers/details/summer/",
+        "broken clouds": "https://addons.opera.com/en/wallpapers/details/freedom-attack-on-titan/",
+        "rain":"https://addons.opera.com/en/wallpapers/details/rainy-day-future-city/",
+        "thunderstorm":"https://addons.opera.com/en/wallpapers/details/sasuke/",
+        "snow":"https://addons.opera.com/en/wallpapers/details/in-the-snow-anime/",
+        "mist": "https://addons.opera.com/en/wallpapers/details/sakura-3/"
+    },
+
+    "mode" : "none",
+    "repeat interval" : "30"
+}
