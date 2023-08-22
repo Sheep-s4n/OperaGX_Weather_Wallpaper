@@ -127,8 +127,3 @@ if "repeat" in settings["mode"]:
             settings = json.load(json_file)
 else:
     main()
-
-#none
-#startup 
-#repeat
-#startup-repeat
