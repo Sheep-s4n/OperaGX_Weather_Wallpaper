@@ -1,7 +1,7 @@
 # OperaGX Weather Wallpaper 
 
 # Description
-**OperaGX Weather Wallpaper** is a simple python script made to change your `OperaGX` based on the current weather of the city you provided.
+**OperaGX Weather Wallpaper** is a simple python script made to change your `OperaGX` based on the current weather of the city you provided.It only works with [OperaGX official website](https://addons.opera.com/en/wallpapers) wallpapers.
 
 ## How it works
 1. The script deletes all your current wallpaper (save them in another folder if you don't want to lose them).
@@ -50,7 +50,7 @@ Options for running the script are located in *settings.json*.
 
 - `themes` : choose which theme to apply for each weather condition.
 
-- `mode` : there are 3 mode:
+- `mode` : there are 3 modes:
 	- `"startup"` : in this mode you use the *main.py* as your `operaGX` launcher, and each time you launch `operaGX` using it,it sets the wallpaper.
     - `"repeat"` : this mode runs the script infinitely until you send a `SIGINT` to the program by typing `ctrl+c`.
     - `"startup-repeat"` this mode combines the two other modes into a single one.
