@@ -3,11 +3,12 @@
     "city": "Tokyo",
     "opera launcher path" : "C:/Users/.../AppData/Local/Programs/Opera GX/launcher.exe",
     "themes files path": "C:/Users/.../AppData/Roaming/Opera Software/Opera GX Stable/themes",
-    "url loading timeout" : "2", 
-    "closing window timeout" : "1", 
-    "mouse pos width" : "default",
-    "mouse pos height" : "default",
-    
+    "url loading timeout" : "5", 
+    "closing window timeout" : "0.5", 
+    "cursor X" : "default",
+    "cursor Y" : "default",
+    "copy script on clipboard" : "True",
+
     "themes" : {
         "clear sky": "https://addons.opera.com/en/wallpapers/details/coding-den-live-wallpaper/",
         "few clouds": "https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/",
@@ -19,6 +20,7 @@
         "mist": "https://addons.opera.com/en/wallpapers/details/sakura-3/"
     },
 
-    "mode" : "none",
-    "repeat interval" : "30"
+    "mode" : "",
+    "repeat interval" : "30",
+    "url loading timeout startup" : "15"
 }
