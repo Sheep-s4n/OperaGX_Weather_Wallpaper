@@ -70,6 +70,6 @@ Or, using the newer version, `python3`
 ```
 python3 main.py
 ```
-Alternatively, you can use the **[launch_daemon.vbs](https://github.com/Sheep-s4n/calculator/blob/main/WindowDaemonScript/launch_daemon.vbs)** file in windows the launch the script in the background
+Alternatively, you can use the **[launch_daemon.vbs](https://github.com/Sheep-s4n/calculator/blob/main/launch_daemon.vbs)** file in windows the launch the script in the background
 
 ⚠️ **[inject.js](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/inject.js) and [Data](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/tree/main/Data) have to be in the same folder as **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** in order to run the script without any issues.** ⚠️
