@@ -42,8 +42,6 @@ Options for running the script are located in **[settings.json](https://github.c
 
 - **`url loading timeout`** : seconds to wait for the web page to be fully loaded (increment if you're browsing on a potato computer).
 
-- **`closing window timeout`** : seconds to wait for the `javascript` code to run.
-
 - **`cursor X`** : default is `"default"` , change it if the cursor doesn't land on the chrome dev tool console (usually for multiple monitor computer).
 
 - **`cursor Y`** : same as `mouse pos width` but for height.
