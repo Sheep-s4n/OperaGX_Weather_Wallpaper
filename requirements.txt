@@ -4,3 +4,4 @@ subprocess
 pynput
 screeninfo
 pyperclip
+dragonfly

@@ -2,12 +2,15 @@ import requests
 import json 
 import subprocess
 import time
+import random
 from os import remove , listdir
 from datetime import date
 from pynput.keyboard import Key, Controller as KeyController
 from pynput.mouse import Button, Controller as MouseController
 from screeninfo import get_monitors
 import pyperclip
+from dragonfly import Window
+
 
 with open('Data/settings.json', 'r') as json_file:
     settings = json.load(json_file)
@@ -26,19 +29,49 @@ monitors = get_monitors()
 keyboard = KeyController()
 mouse = MouseController()
 
-
+def getWallpaper(object , key):
+    wallpaper = object[key]
+    if isinstance(wallpaper , list):
+        index = random.randint(0, len(wallpaper) - 1)
+        wallpaper = wallpaper[index]
+    return wallpaper
 
 def writeJSON(path, json) :
     with open(path, 'w') as json_file: 
         json_file.write(json)
 
+def click_left(position):
+    mouse.position = position
+    mouse.press(Button.left)
+    mouse.release(Button.left)
+
+# Calculate mouse position
+first_monitor_width = monitors[0].width
+first_monitor_height = monitors[0].height
+
+default_mouse_pos = (
+first_monitor_width - (first_monitor_width / 6) if settings["cursor X"] == "default" else int(settings["cursor X"] ), 
+first_monitor_height / 2 if settings["cursor Y"] == "default" else int(settings["cursor Y"])
+)
+
+def InjectScript(content):
+    
+    click_left(default_mouse_pos)
+
+    if settings["copy script on clipboard"] == "True":
+        pyperclip.copy(content)
+        keyboard.press(Key.ctrl_l)
+        keyboard.tap("v")
+        keyboard.release(Key.ctrl_l)
+    else:
+        keyboard.type(content)
+    
+    keyboard.tap(Key.enter)
+
+
 
 def main(startup):
 
-    def click_left(position):
-        mouse.position = position
-        mouse.press(Button.left)
-        mouse.release(Button.left)
 
     # Get weather data
     response = requests.get(URL)
@@ -51,6 +84,7 @@ def main(startup):
         weather_list = list(settings['themes'].keys())
 
         print(f"Weather for {settings['city']} is {weather}")
+
 
         find_match = False
 
@@ -65,20 +99,21 @@ def main(startup):
             for desc in weather_list:
                 if desc in weather:
                     weather = desc 
+                    break
 
-        wallpaper_url = settings['themes'][weather]
+        if weather in settings["themes"]:
+            wallpaper_url = getWallpaper(settings["themes"] , weather)
+        else:
+            print(f"No wallpaper matches for {weather}")
+            print("Switching to default wallpaper")
+            wallpaper_url = getWallpaper(settings["themes"] , "default")
+
 
         path = settings["themes files path"]
         themes = listdir(path)
         url_parts = wallpaper_url.rstrip('/').split('/')
         new_theme_name = url_parts[-1] if url_parts else None
         
-
-        if wallpaper_url == "":
-            print(f"No wallpaper set for {weather}")
-            print("Ending program...")
-            exit(0)
-
         print(f"Found matching wallpaper: {wallpaper_url}")
 
 
@@ -111,15 +146,6 @@ f'''{{
         else:
             time.sleep(float(settings['url loading timeout']))
 
-        # Calculate mouse position
-        first_monitor_width = monitors[0].width
-        first_monitor_height = monitors[0].height
-
-        default_mouse_pos = (
-        first_monitor_width - (first_monitor_width / 6) if settings["cursor X"] == "default" else int(settings["cursor X"] ), 
-        first_monitor_height / 2 if settings["cursor Y"] == "default" else int(settings["cursor Y"])
-        )
-        
         click_left(default_mouse_pos)
 
         # Open the console window
@@ -129,34 +155,21 @@ f'''{{
         keyboard.release(Key.shift_l)
         keyboard.release(Key.ctrl_l)
 
-        time.sleep(2)
-
-
-        click_left(default_mouse_pos)
+        OperaWindowCount = len(Window.get_matching_windows("opera.exe")) - 1 # window is already opened
+        
 
         # Inject script to download the wallpaper 
 
         script = open("inject.js", "r")
         content = script.read().replace("\n", "")
-        if settings["copy script on clipboard"] == "True":
-            clipboard_content = pyperclip.paste()
-            pyperclip.copy(content)
-            keyboard.press(Key.ctrl_l)
-            keyboard.tap("v")
-            keyboard.release(Key.ctrl_l)
-        else:
-            keyboard.type(content)
+        clipboard_content = pyperclip.paste()
+
+
+        InjectScript(content)
+        while len(Window.get_matching_windows("opera.exe")) != OperaWindowCount: # looping script execution until the windows is closed
+                InjectScript(content)
+                time.sleep(1)
         
-        keyboard.tap(Key.enter)
-
-        time.sleep(float(settings['closing window timeout']))
-
-        # Close operaGX window
-        keyboard.press(Key.ctrl_l)
-        keyboard.tap("w")
-        keyboard.release(Key.ctrl_l)
-
-        # setting back old clipboard content
         if settings["copy script on clipboard"] == "True":
             pyperclip.copy(clipboard_content)
 

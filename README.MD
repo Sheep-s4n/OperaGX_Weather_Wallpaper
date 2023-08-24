@@ -50,7 +50,7 @@ Options for running the script are located in **[settings.json](https://github.c
 
 -  **`copy script on clipboard`** : the value is "True" or "False". Copy the `javascript` code on clipboard so as to run it much faster.
 
-- **`themes`** : choose which theme to apply for each weather condition.
+- **`themes`** : choose which theme to apply for each weather condition. Weather descriptions are sorted in such a way that the weather placed highest in the `JSON` object takes priority over the others. For example, if the weather is `thunderstorm with rain` the rain wallpaper will be set if rain is higher in the object than the thunderstorm wallpaper. You can also add a new key-value pair to the object for specific cases as `thunderstorm with rain`. It is also possible to set multiple wallpaper for a single weather condition in a list, the wallpaper will be taken randomly.
 
 - **`mode`** : there are 3 modes:
 	- `"startup"` : in this mode you use the **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** as your `operaGX` launcher, and each time you launch `operaGX` using it,it sets the wallpaper.
