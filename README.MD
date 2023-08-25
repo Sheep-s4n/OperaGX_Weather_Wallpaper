@@ -22,7 +22,7 @@ git clone https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper.git
 ```
 Or, you can download it manually:
 
-![download github code example](https://i.ibb.co/PxTNd4W/image.png)
+[![download github code example](https://i.ibb.co/PxTNd4W/image.png)](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/archive/refs/heads/main.zip)
 ## 2. Dependencies downloading
 Run this `pip` command to install all requires dependencies:
 ```
@@ -48,16 +48,67 @@ Options for running the script are located in **[settings.json](https://github.c
 
 -  **`copy script on clipboard`** : the value is "True" or "False". Copy the `javascript` code on clipboard so as to run it much faster.
 
-- **`themes`** : choose which theme to apply for each weather condition. Weather descriptions are sorted in such a way that the weather placed highest in the `JSON` object takes priority over the others. For example, if the weather is `thunderstorm with rain` the rain wallpaper will be set if rain is higher in the object than the thunderstorm wallpaper. You can also add a new key-value pair to the object for specific cases as `thunderstorm with rain`. It is also possible to set multiple wallpaper for a single weather condition in a list, the wallpaper will be taken randomly.
+- **`themes`** : choose which theme to apply for each weather condition provided by the the `OpenWeather` API. For example:
+  ```
+  "themes" : {
+      "snow":"https://addons.opera.com/en/wallpapers/details/in-the-snow-anime/"
+  }
+  ```
+
+  This code will set the `https://addons.opera.com/en/wallpapers/details/in-the-snow-anime/` wallpaper when the weather description is `snow`.
+
+  You can also set multiple wallpaper for a single weather description such as in the following code:
+  ```
+  "scattered clouds":["https://addons.opera.com/en/wallpapers/details/summer/", "https://addons.opera.com/en/wallpapers/details/windmill-anime/"]
+  ```
+  In this case the wallpaper will be randomly chosen.
+
+  Moreover, you can set a time-dependent wallpaper for a weather description:
+  ```
+  "few clouds":[
+      {
+          "start-time": "19:00",
+          "end-time": "21:00",
+          "wallpaper" :"https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/"
+      }
+  ]
+  ```
+  In this code snippet, the wallpaper will be `"https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/"` between `19:00` and `20:00` for the weather description `few clouds`
+
+  Finally, you can combine all the options, as shown in the following example:
+  ```
+  "few clouds":[
+      {
+          "start-time": "19:00",
+          "end-time": "21:00",
+          "wallpaper" :["https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/","https://addons.opera.com/en/wallpapers/details/silhouette-sunset-mountains/"]
+      },"https://addons.opera.com/en/wallpapers/details/time-alone/"
+  ]
+  ```
+  Here, the wallpaper will be chosen randomly between `https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/` and `https://addons.opera.com/en/wallpapers/details/silhouette-sunset-mountains/` from `19:00` to `21:00` and the rest of the time it will be `https://addons.opera.com/en/wallpapers/details/time-alone/`
+
+	If no wallpaper is found the default wallpaper will be used. You can set the `default` wallpaper like this:
+    ```
+	"default":"https://addons.opera.com/en/wallpapers/details/coding-den-live-wallpaper/"
+    ```
+	Weather descriptions are sorted in such a way that the weather placed highest in the `JSON` object takes priority over the others.For example, if the weather is `thunderstorm with rain` the `rain` wallpaper will be the one chosen in the following example as `rain` wallpaper is higher in the object than the `thunderstorm`	 wallpaper:
+    ```
+    "rain":"https://addons.opera.com/en/wallpapers/details/rainy-day-future-city/",
+    "thunderstorm":"https://addons.opera.com/en/wallpapers/details/sasuke/"
+    ```
+	You can also add a new key-value pair to the object for specific cases as `thunderstorm with rain`:
+    ```
+    "thunderstorm with rain":"https://addons.opera.com/en/wallpapers/details/old-steves-pub/"
+    ```
 
 - **`mode`** : there are 3 modes:
-	- `"startup"` : in this mode you use the **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** as your `operaGX` launcher, and each time you launch `operaGX` using it,it sets the wallpaper.
-    - `"repeat"` : this mode runs the script infinitely until you send a `SIGINT` to the program by typing `ctrl+c`.
-    - `"startup-repeat"` this mode combines the two other modes into a single one.
+	- `startup` : in this mode you use the **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** as your `operaGX` launcher, and each time you launch `operaGX` using it,it sets the wallpaper.
+    - `repeat` : this mode runs the script infinitely until you send a `SIGINT` to the program by typing `ctrl+c`.
+    - `startup-repeat` this mode combines the two other modes into a single one.
 
-- **`repeat interval`** : Only for `"repeat"` and `"startup-repeat"` modes, defines the number of minutes until the next wallpaper is set.
+- **`repeat interval`** : Only for `repeat` and `startup-repeat` modes, defines the number of minutes until the next wallpaper is set.
 
-- **`url loading timeout startup`** : Only for `"startup"` mode, defines the number of seconds to wait for `OperaGX` to start up (because `OperaGX` usually takes longer to start up the first time).
+- **`url loading timeout startup`** : Only for `startup` and `startup-repeat` modes, defines the number of seconds to wait for `OperaGX` to start up (`OperaGX` usually takes longer to start up the first time).
 
 ## 4. Running the script
 Now you just have to run the python script using `python`:

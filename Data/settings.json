@@ -9,8 +9,39 @@
     "copy script on clipboard" : "True",
 
     "themes" : {
-        "clear sky":["https://addons.opera.com/en/wallpapers/details/lofi-girl-initial-d-toyota-trueno-ae86/", "https://addons.opera.com/en/wallpapers/details/cherry-blossom/"],
-        "few clouds":["https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/"],
+        "clear sky":[
+            {
+                "start-time": "00:00",
+                "end-time": "6:00",
+                "wallpaper" : "https://addons.opera.com/en/wallpapers/details/lonely-anime-boy/"
+            },
+            {
+                "start-time": "6:00",
+                "end-time": "8:30",
+                "wallpaper" : "https://addons.opera.com/en/wallpapers/details/lofi-girl-initial-d-toyota-trueno-ae86/"
+            },
+            {
+                "start-time": "8:30",
+                "end-time": "20:00",
+                "wallpaper" : "https://addons.opera.com/en/wallpapers/details/cherry-blossom/"
+            },
+            {
+                "start-time": "20:00",
+                "end-time": "20:30",
+                "wallpaper" : "https://addons.opera.com/en/wallpapers/details/coastal-city-and-cherry-blossom-tree/"
+            },
+            {
+                "start-time": "20:30",
+                "end-time": "24:00",
+                "wallpaper" : "https://addons.opera.com/en/wallpapers/details/lonely-anime-boy/"
+        }],
+        "few clouds":[
+            {
+                "start-time": "19:00",
+                "end-time": "21:00",
+                "wallpaper" :["https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/","https://addons.opera.com/en/wallpapers/details/silhouette-sunset-mountains/"]
+            },"https://addons.opera.com/en/wallpapers/details/time-alone/"
+        ],
         "scattered clouds":["https://addons.opera.com/en/wallpapers/details/summer/", "https://addons.opera.com/en/wallpapers/details/windmill-anime/"],
         "broken clouds":"https://addons.opera.com/en/wallpapers/details/freedom-attack-on-titan/",
         "thunderstorm":"https://addons.opera.com/en/wallpapers/details/sasuke/",
