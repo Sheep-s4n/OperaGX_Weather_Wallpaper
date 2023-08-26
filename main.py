@@ -9,6 +9,7 @@ from pynput.keyboard import Key, Controller as KeyController
 from pynput.mouse import Button, Controller as MouseController
 from screeninfo import get_monitors
 import pyperclip
+import socket
 from dragonfly import Window
 
 
@@ -23,11 +24,22 @@ URL = BASE_URL + "q=" + CITY + "&appid=" + API_KEY
 MIN_TO_SEC = 60
 HTTP_OK = 200
 DATA_FILE = "Data/user_data.json"
-startup_param = False 
 
 monitors = get_monitors()
 keyboard = KeyController()
 mouse = MouseController()
+
+def has_internet_connection():
+    try:
+        # Try to create a socket connection to a well-known server (Google's DNS server)
+        socket.create_connection(("8.8.8.8", 53), timeout=5)
+        return True
+    except OSError:
+        pass
+    return False
+    
+def is_OperaGXOpen():
+    return len(Window.get_matching_windows("opera.exe")) > 0
 
 def time_in_range(start, end, x):
     """Return true if x is in the range [start, end]"""
@@ -36,6 +48,14 @@ def time_in_range(start, end, x):
     else:
         return start <= x or x <= end
 
+def handleTimeWallpaper():
+    if 'time_overwrite' in settings['themes']:
+        wallpaper = getWallpaper(settings["themes"], "time_overwrite")
+        if wallpaper : print("Overwritting wallpaper with time dependent wallpaper")
+        return wallpaper
+    else:
+        return False
+
 def getWallpaper(object , key):
     wallpaper = object[key]
     if isinstance(wallpaper, dict):
@@ -43,6 +63,7 @@ def getWallpaper(object , key):
         start_hour, start_min = map(int, object[key]["start-time"].split(":"))
         start_time = datetime.time(start_hour , start_min)
         end_hour, end_min = map(int, object[key]["end-time"].split(":"))
+        end_hour = 0 if end_hour == 24 and end_min == 0 else end_hour
         end_time = datetime.time(end_hour , end_min)
         if time_in_range(start_time , end_time , current_time):
             wallpaper = object[key]["wallpaper"]
@@ -58,9 +79,7 @@ def getWallpaper(object , key):
         if has_time_wallpaper:
             # generator expression
             # {what to return} for {element name} in {list} if {condition for returning}
-            i = -1
-            for wallpp in wallpaper:
-                i+=1
+            for i , wallpp in enumerate(wallpaper):
                 if not isinstance(wallpp, dict): continue
                 wallpaper_res = getWallpaper(object[key] , i)
                 # wallpaper is a valid time wallpaper
@@ -68,6 +87,8 @@ def getWallpaper(object , key):
         
         # current time is not on any wallpaper time range
         no_time_wallpapers = [url for url in wallpaper if isinstance(url, str)]
+        # no other wallpapers
+        if len(no_time_wallpapers) == 0: return False
         index = random.randint(0, len(no_time_wallpapers) - 1)
         wallpaper = no_time_wallpapers[index]
     return wallpaper
@@ -108,8 +129,13 @@ def InjectScript(content):
 
 
 
-def main(startup):
+def main():
 
+    if not has_internet_connection():
+        print("You don't have an active internet connection")
+        print("Couldn't make a request to openWeather API servers")                
+        print("Closing function...")
+        return
 
     # Get weather data
     response = requests.get(URL)
@@ -150,18 +176,20 @@ def main(startup):
             else:
                 return wallpaper_url
 
-        if weather in settings["themes"]:
-            wallpaper_url = getWallpaper(settings["themes"] , weather)
-            if not wallpaper_url:
+        wallpaper_url = handleTimeWallpaper()
+        if not wallpaper_url:
+            if weather in settings["themes"]:
+                wallpaper_url = getWallpaper(settings["themes"] , weather)
+                if not wallpaper_url:
+                    wallpaper_url = switchToDefaultWallpaper()
+                    # no default wallpaper
+                    if not wallpaper_url:
+                        return
+            else:
                 wallpaper_url = switchToDefaultWallpaper()
                 # no default wallpaper
                 if not wallpaper_url:
                     return
-        else:
-            wallpaper_url = switchToDefaultWallpaper()
-            # no default wallpaper
-            if not wallpaper_url:
-                return
 
         path = settings["themes files path"]
         themes = listdir(path)
@@ -183,6 +211,8 @@ f'''{{
     "last_theme": "{new_theme_name}"
 }}''') 
                 print("Wallpaper is already set, skipping...")
+                if not is_OperaGXOpen():
+                    subprocess.Popen(settings["opera launcher path"])
                 return
 
 
@@ -191,14 +221,19 @@ f'''{{
         for theme in themes:
             remove(f'{path}/{theme}')
 
+        is_startup = False
+        if not is_OperaGXOpen():
+            subprocess.Popen(settings["opera launcher path"])
+            time.sleep(0.5)
+            is_startup = True
         # Open new OperaGX window
         subprocess.Popen([settings["opera launcher path"] ,"--new-window" ,wallpaper_url])
-
+        
         # Wait for webpage to load 
-        if startup:
-            time.sleep(float(settings['url loading timeout startup']))
+        if is_startup:
+            time.sleep(float(settings['open OperaGX delay']))
         else:
-            time.sleep(float(settings['url loading timeout']))
+            time.sleep(float(settings['url loading delay']))
 
         click_left(default_mouse_pos)
 
@@ -218,11 +253,16 @@ f'''{{
         content = script.read().replace("\n", "")
         clipboard_content = pyperclip.paste()
 
-
+        iteration_count = 0
+        max_iterations = float(settings['url loading delay']) + 10
         InjectScript(content)
         while len(Window.get_matching_windows("opera.exe")) != OperaWindowCount: # looping script execution until the windows is closed
+                if iteration_count >= max_iterations:
+                    print("Failed to inject script")
+                    return 
                 InjectScript(content)
                 time.sleep(1)
+                iteration_count += 1
         
         if settings["copy script on clipboard"] == "True":
             pyperclip.copy(clipboard_content)
@@ -236,23 +276,18 @@ f'''{{
 }}''') 
 
     else:
-        print("Request to OpenWeather API failed")
-        print("Tip: check your api key")
+        print("Couldn't find weather description")
+        data = response.json()
+        print(f"Error ({data['cod']}): {data['message']}")
 
-
-# Main function called here
-if "startup" in settings["mode"]: 
-    subprocess.Popen(settings["opera launcher path"])
-    startup_param = True
 
 if "repeat" in settings["mode"]:
     while "repeat" in settings["mode"]:
-        main(startup_param)
-        startup_param = False 
+        main()
         print(f"Waiting for {settings['repeat interval']} minutes...")
         time.sleep(float(settings["repeat interval"]) * MIN_TO_SEC)
         # reload the file for any changes
         with open('Data/settings.json', 'r') as json_file:
             settings = json.load(json_file)
 else:
-    main(startup_param)
+    main()

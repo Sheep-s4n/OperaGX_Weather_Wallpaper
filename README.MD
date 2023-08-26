@@ -40,7 +40,9 @@ Options for running the script are located in **[settings.json](https://github.c
 
 - **`themes files path`** : `OperaGX` wallpaper files path.
 
-- **`url loading timeout`** : seconds to wait for the web page to be fully loaded (increment if you're browsing on a potato computer).
+- **`url loading delay`** : seconds to wait for the web page to be fully loaded (increment if you're browsing on a potato computer).
+
+- **`open OperaGX delay`** : seconds to wait for OperaGX to start up (increment if you're browsing on a potato computer).
 
 - **`cursor X`** : default is `"default"` , change it if the cursor doesn't land on the chrome dev tool console (usually for multiple monitor computer).
 
@@ -48,7 +50,7 @@ Options for running the script are located in **[settings.json](https://github.c
 
 -  **`copy script on clipboard`** : the value is "True" or "False". Copy the `javascript` code on clipboard so as to run it much faster.
 
-- **`themes`** : choose which theme to apply for each weather condition provided by the the `OpenWeather` API. For example:
+- **`themes`** : choose which theme to apply for each weather condition provided by the the `OpenWeather` API. **For example:**
   ```
   "themes" : {
       "snow":"https://addons.opera.com/en/wallpapers/details/in-the-snow-anime/"
@@ -57,13 +59,13 @@ Options for running the script are located in **[settings.json](https://github.c
 
   This code will set the `https://addons.opera.com/en/wallpapers/details/in-the-snow-anime/` wallpaper when the weather description is `snow`.
 
-  You can also set multiple wallpaper for a single weather description such as in the following code:
+  **You can also set multiple wallpaper for a single weather description such as in the following code:**
   ```
   "scattered clouds":["https://addons.opera.com/en/wallpapers/details/summer/", "https://addons.opera.com/en/wallpapers/details/windmill-anime/"]
   ```
   In this case the wallpaper will be randomly chosen.
 
-  Moreover, you can set a time-dependent wallpaper for a weather description:
+  **Moreover, you can set a time-dependent wallpaper for a weather description:**
   ```
   "few clouds":[
       {
@@ -72,10 +74,20 @@ Options for running the script are located in **[settings.json](https://github.c
           "wallpaper" :"https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/"
       }
   ]
-  ```
+  ```  
   In this code snippet, the wallpaper will be `"https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/"` between `19:00` and `20:00` for the weather description `few clouds`
-
-  Finally, you can combine all the options, as shown in the following example:
+    
+    **Furthermore, you can set a time-dependent wallpaper that will be set regardless of the weather in the `time_overwrite` section:**
+  ```
+  "time_overwrite" : {
+  	"start-time": "20:30",
+  	"end-time": "24:00",
+  	"wallpaper" : "https://addons.opera.com/en/wallpapers/details/endless-galaxy-train/"
+  },
+  ```
+  The `https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/` will bet set from `19:00` to `24:00` (same as `00:00`) no matter what weather it is.
+  
+  **Finally, you can combine multiple options, as shown in the following example:**
   ```
   "few clouds":[
       {
@@ -87,38 +99,34 @@ Options for running the script are located in **[settings.json](https://github.c
   ```
   Here, the wallpaper will be chosen randomly between `https://addons.opera.com/en/wallpapers/details/anime-girl-looking-at-sunset/` and `https://addons.opera.com/en/wallpapers/details/silhouette-sunset-mountains/` from `19:00` to `21:00` and the rest of the time it will be `https://addons.opera.com/en/wallpapers/details/time-alone/`
 
-	If no wallpaper is found the default wallpaper will be used. You can set the `default` wallpaper like this:
+	**If no wallpaper is found the default wallpaper will be used. You can set the `default` wallpaper like this:**
     ```
 	"default":"https://addons.opera.com/en/wallpapers/details/coding-den-live-wallpaper/"
     ```
-	Weather descriptions are sorted in such a way that the weather placed highest in the `JSON` object takes priority over the others.For example, if the weather is `thunderstorm with rain` the `rain` wallpaper will be the one chosen in the following example as `rain` wallpaper is higher in the object than the `thunderstorm`	 wallpaper:
+	Weather descriptions are sorted in such a way that the weather placed highest in the `JSON` object takes priority over the others. **For example, if the weather is `thunderstorm with rain` the `rain` wallpaper will be the one chosen in the following example as `rain` wallpaper is higher in the object than the `thunderstorm` wallpaper:**
     ```
     "rain":"https://addons.opera.com/en/wallpapers/details/rainy-day-future-city/",
     "thunderstorm":"https://addons.opera.com/en/wallpapers/details/sasuke/"
     ```
-	You can also add a new key-value pair to the object for specific cases as `thunderstorm with rain`:
+	**You can also add a new key-value pair to the object for specific cases as `thunderstorm with rain`:**
     ```
     "thunderstorm with rain":"https://addons.opera.com/en/wallpapers/details/old-steves-pub/"
     ```
 
-- **`mode`** : there are 3 modes:
-	- `startup` : in this mode you use the **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** as your `operaGX` launcher, and each time you launch `operaGX` using it,it sets the wallpaper.
+- **`mode`** : there is one mode for the moment:
     - `repeat` : this mode runs the script infinitely until you send a `SIGINT` to the program by typing `ctrl+c`.
-    - `startup-repeat` this mode combines the two other modes into a single one.
-
-- **`repeat interval`** : Only for `repeat` and `startup-repeat` modes, defines the number of minutes until the next wallpaper is set.
-
-- **`url loading timeout startup`** : Only for `startup` and `startup-repeat` modes, defines the number of seconds to wait for `OperaGX` to start up (`OperaGX` usually takes longer to start up the first time).
+   
+- **`repeat interval`** : only for `repeat` mode, defines the number of minutes until the next wallpaper is set.
 
 ## 4. Running the script
 Now you just have to run the python script using `python`:
 ```
 python main.py
 ```
-Or, using the newer version, `python3`
+Or, using the newer version, `python3`:
 ```
 python3 main.py
 ```
-Alternatively, you can use the **[launch_daemon.vbs](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/launch_daemon.vbs)** file in windows the launch the script in the background
+Alternatively, you can use the **[launch_daemon.vbs](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/launch_daemon.vbs)** file in windows the launch the script in the background. In order to close the daemon process, you have  to run the **[stop_daemon.vbs](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/stop_daemon.vbs)** script (or just close the `python.exe` process from task manager).
 
 ⚠️ **Important: [inject.js](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/inject.js) and [Data](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/tree/main/Data) have to be in the same folder as **[main.py](https://github.com/Sheep-s4n/OperaGX_Weather_Wallpaper/blob/main/main.py)** in order to run the script without any issues.** ⚠️

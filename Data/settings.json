@@ -3,12 +3,18 @@
     "city": "Tokyo",
     "opera launcher path" : "C:/Users/.../AppData/Local/Programs/Opera GX/launcher.exe",
     "themes files path": "C:/Users/.../AppData/Roaming/Opera Software/Opera GX Stable/themes",
-    "url loading timeout" : "5", 
+    "url loading delay" : "5", 
+    "open OperaGX delay" : "10",
     "cursor X" : "default",
     "cursor Y" : "default",
     "copy script on clipboard" : "True",
 
     "themes" : {
+        "time_overwrite" : {
+            "start-time": "20:30",
+            "end-time": "24:00",
+            "wallpaper" : "https://addons.opera.com/en/wallpapers/details/endless-galaxy-train/"
+        },
         "clear sky":[
             {
                 "start-time": "00:00",
@@ -53,6 +59,5 @@
     },
 
     "mode" : "",
-    "repeat interval" : "30",
-    "url loading timeout startup" : "15"
+    "repeat interval" : "30"
 }
