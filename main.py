@@ -236,6 +236,7 @@ f'''{{
             time.sleep(float(settings['url loading delay']))
 
         click_left(default_mouse_pos)
+        click_left(default_mouse_pos)
 
         # Open the console window
         keyboard.press(Key.ctrl_l)
